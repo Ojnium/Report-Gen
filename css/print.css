@@ -1,0 +1,48 @@
+/* ============================================
+   PRINT STYLESHEET - A4 PORTRAIT
+   
+   Primary printing is handled by the iframe
+   approach in app.js. This stylesheet is a
+   safety net for direct Ctrl+P from the
+   main page.
+   ============================================ */
+
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        background: #fff !important;
+        overflow: hidden !important;
+    }
+
+    /* Hide the main dashboard */
+    body > .dashboard,
+    body > .modal-overlay,
+    body > .toast-container {
+        display: none !important;
+    }
+
+    /* Hide any leftover print clones */
+    body > #print-clone {
+        display: none !important;
+    }
+
+    /* Hide iframes (the iframe handles its own print) */
+    iframe {
+        display: none !important;
+    }
+}

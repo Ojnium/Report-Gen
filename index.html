@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom International School - Result & Testimonial Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/print.css" media="print">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <header class="app-header no-print">
+            <div class="header-left">
+                <div class="header-logo">
+                    <img src="assets/school-logo.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="header-logo-fallback"><i class="fas fa-school"></i></div>
+                </div>
+                <div class="header-text">
+                    <h1>Freedom International School</h1>
+                    <p>Result &amp; Testimonial Generator</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-ghost" id="settingsBtn" aria-label="Settings">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+        </header>
+
+        <main class="app-main">
+
+            <section class="doc-selector no-print" aria-label="Select Document Type">
+                <div class="selector-card active" data-type="waec" tabindex="0" role="button" aria-pressed="true">
+                    <div class="card-icon"><i class="fas fa-file-lines"></i></div>
+                    <h3>WAEC Statement of Result</h3>
+                    <p>West African Examinations Council</p>
+                </div>
+                <div class="selector-card" data-type="neco" tabindex="0" role="button" aria-pressed="false">
+                    <div class="card-icon"><i class="fas fa-file-certificate"></i></div>
+                    <h3>NECO Statement of Result</h3>
+                    <p>National Examinations Council</p>
+                </div>
+                <div class="selector-card" data-type="testimonial" tabindex="0" role="button" aria-pressed="false">
+                    <div class="card-icon"><i class="fas fa-scroll"></i></div>
+                    <h3>School Testimonial</h3>
+                    <p>Official school testimonial</p>
+                </div>
+            </section>
+
+            <div class="workspace">
+
+                <section class="form-panel no-print" aria-label="Data Entry Form">
+
+                    <!-- WAEC Form -->
+                    <form id="waecForm" class="doc-form active" autocomplete="off">
+                        <h2><i class="fas fa-file-lines"></i> WAEC Statement of Result</h2>
+                        <div class="form-section">
+                            <h3>Student Information</h3>
+                            <div class="form-group">
+                                <label for="waecName">Student Name <span class="required">*</span></label>
+                                <input type="text" id="waecName" placeholder="e.g. John Doe" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="waecYear">Examination Year <span class="required">*</span></label>
+                                    <input type="number" id="waecYear" min="1990" max="2099" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="waecClass">Class <span class="required">*</span></label>
+                                    <input type="text" id="waecClass" placeholder="e.g. SSS 3A" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="waecExamNo">Examination Number <span class="required">*</span></label>
+                                <input type="text" id="waecExamNo" placeholder="e.g. 12345678901" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="waecCertNo">Certificate Number</label>
+                                <input type="text" id="waecCertNo" placeholder="e.g. FIS/2026/001">
+                            </div>
+                            <div class="form-group">
+                                <label>Passport Photograph</label>
+                                <div class="photo-upload">
+                                    <input type="file" id="waecPhoto" accept=".jpg,.jpeg,.png,.webp">
+                                    <div class="photo-preview-box" id="waecPhotoPreview">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Choose Image</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Subjects &amp; Grades</h3>
+                            <p class="form-hint">WAEC uses a two-column table. Subjects are automatically split: first half on the left, second half on the right.</p>
+                            <div class="subject-list" id="waecSubjects"></div>
+                            <button type="button" class="btn btn-add" id="waecAddSubject">
+                                <i class="fas fa-plus"></i> Add Subject
+                            </button>
+                        </div>
+                        <div class="form-section">
+                            <h3>Performance Summary</h3>
+                            <div class="grade-summary" id="waecSummary">
+                                <div class="summary-chip"><span class="chip-label">A's</span><span class="chip-value" data-count="a">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">B's</span><span class="chip-value" data-count="b">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">C's</span><span class="chip-value" data-count="c">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">D's</span><span class="chip-value" data-count="d">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">E's</span><span class="chip-value" data-count="e">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">F's</span><span class="chip-value" data-count="f">0</span></div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="printDocument()"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" class="btn btn-danger" onclick="clearForm('waec')"><i class="fas fa-eraser"></i> Clear</button>
+                        </div>
+                    </form>
+
+                    <!-- NECO Form -->
+                    <form id="necoForm" class="doc-form" autocomplete="off">
+                        <h2><i class="fas fa-file-certificate"></i> NECO Statement of Result</h2>
+                        <div class="form-section">
+                            <h3>Student Information</h3>
+                            <div class="form-group">
+                                <label for="necoName">Student Name <span class="required">*</span></label>
+                                <input type="text" id="necoName" placeholder="e.g. John Doe" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="necoYear">Examination Year <span class="required">*</span></label>
+                                    <input type="number" id="necoYear" min="1990" max="2099" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="necoClass">Class <span class="required">*</span></label>
+                                    <input type="text" id="necoClass" placeholder="e.g. SSS 3A" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="necoExamNo">Examination Number <span class="required">*</span></label>
+                                <input type="text" id="necoExamNo" placeholder="e.g. 12345678901" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="necoCertNo">Certificate Number</label>
+                                <input type="text" id="necoCertNo" placeholder="e.g. FIS/2026/001">
+                            </div>
+                            <div class="form-group">
+                                <label>Passport Photograph</label>
+                                <div class="photo-upload">
+                                    <input type="file" id="necoPhoto" accept=".jpg,.jpeg,.png,.webp">
+                                    <div class="photo-preview-box" id="necoPhotoPreview">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Choose Image</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Subjects &amp; Grades</h3>
+                            <p class="form-hint">NECO uses a two-column table. Subjects are automatically split: first half on the left, second half on the right.</p>
+                            <div class="subject-list" id="necoSubjects"></div>
+                            <button type="button" class="btn btn-add" id="necoAddSubject">
+                                <i class="fas fa-plus"></i> Add Subject
+                            </button>
+                        </div>
+                        <div class="form-section">
+                            <h3>Performance Summary</h3>
+                            <div class="grade-summary" id="necoSummary">
+                                <div class="summary-chip"><span class="chip-label">A's</span><span class="chip-value" data-count="a">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">B's</span><span class="chip-value" data-count="b">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">C's</span><span class="chip-value" data-count="c">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">D's</span><span class="chip-value" data-count="d">0</span></div>
+                                <div class="summary-chip"><span class="chip-label">E's</span><span class="chip-value" data-count="e">0</span></div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="printDocument()"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" class="btn btn-danger" onclick="clearForm('neco')"><i class="fas fa-eraser"></i> Clear</button>
+                        </div>
+                    </form>
+
+                    <!-- Testimonial Form -->
+                    <form id="testimonialForm" class="doc-form" autocomplete="off">
+                        <h2><i class="fas fa-scroll"></i> School Testimonial</h2>
+                        <div class="form-section">
+                            <h3>Student Information</h3>
+                            <div class="form-group">
+                                <label for="testName">Name <span class="required">*</span></label>
+                                <input type="text" id="testName" placeholder="Full name" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="testExamNo">Exam No. <span class="required">*</span></label>
+                                    <input type="text" id="testExamNo" placeholder="Exam number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="testClassEntered">Class Entered</label>
+                                    <input type="text" id="testClassEntered" placeholder="e.g. JSS 1">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="testFrom">From</label>
+                                    <input type="text" id="testFrom" placeholder="e.g. 2018">
+                                </div>
+                                <div class="form-group">
+                                    <label for="testTo">To</label>
+                                    <input type="text" id="testTo" placeholder="e.g. 2025">
+                                </div>
+                                <div class="form-group">
+                                    <label for="testClassLeft">Class Left</label>
+                                    <input type="text" id="testClassLeft" placeholder="e.g. SSS 3">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Academic Details</h3>
+                            <div class="form-group">
+                                <label for="testSubjects">Subjects Studied</label>
+                                <textarea id="testSubjects" rows="2" placeholder="English, Mathematics, Physics, Chemistry, Biology..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="testAcademic">Academic Ability</label>
+                                <textarea id="testAcademic" rows="2" placeholder="e.g. Excellent in sciences"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Activities &amp; Conduct</h3>
+                            <div class="form-group">
+                                <label for="testActivities">Co-Curricular Activities</label>
+                                <textarea id="testActivities" rows="2" placeholder="Football, Debate Club..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="testPost">Post of Responsibility Held</label>
+                                <textarea id="testPost" rows="2" placeholder="Senior Prefect..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="testAttitude">Remarks on Attitude</label>
+                                <textarea id="testAttitude" rows="2" placeholder="Hardworking, respectful..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="testRemarks">General Remarks</label>
+                                <textarea id="testRemarks" rows="3" placeholder="Overall assessment"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="printDocument()"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" class="btn btn-danger" onclick="clearForm('testimonial')"><i class="fas fa-eraser"></i> Clear</button>
+                        </div>
+                    </form>
+
+                </section>
+
+                <aside class="preview-panel" aria-label="Document Preview">
+                    <div class="preview-toolbar no-print">
+                        <span class="preview-label"><i class="fas fa-eye"></i> Live Preview</span>
+                        <span class="preview-hint">Fields positioned from your annotated measurements</span>
+                    </div>
+                    <div class="preview-scroll" id="previewScroll">
+
+                        <!-- WAEC -->
+                        <div id="waecDoc" class="document-page">
+                            <img class="template-img" src="assets/waec-template.jpeg" alt="WAEC Template"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="template-placeholder">
+                                <i class="fas fa-image"></i>
+                                <span>Place waec-template.jpeg in assets/ folder</span>
+                            </div>
+                            <div class="overlay">
+                                <div class="ov-photo" id="waecOvPhoto">
+                                    <img src="" alt="" class="ov-photo-img" onerror="this.style.display='none';">
+                                </div>
+                                <div class="ov-text ov-name" data-field="name"></div>
+                                <div class="ov-text ov-year" data-field="year"></div>
+                                <div class="ov-text ov-examno" data-field="examno"></div>
+                                <div class="ov-text ov-class" data-field="class"></div>
+                                <div class="ov-table-area">
+                                    <div class="ov-table-body" data-field="subjects"></div>
+                                </div>
+                                <div class="ov-summary-area">
+                                    <span class="ov-count" data-field="count-a"></span>
+                                    <span class="ov-count" data-field="count-b"></span>
+                                    <span class="ov-count" data-field="count-c"></span>
+                                    <span class="ov-count" data-field="count-d"></span>
+                                    <span class="ov-count" data-field="count-e"></span>
+                                    <span class="ov-count" data-field="count-f"></span>
+                                </div>
+                                <div class="ov-text ov-date" data-field="date"></div>
+                                <div class="ov-text ov-cert" data-field="cert"></div>
+                            </div>
+                        </div>
+
+                        <!-- NECO -->
+                        <div id="necoDoc" class="document-page" style="display:none;">
+                            <img class="template-img" src="assets/neco-template.jpeg" alt="NECO Template"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="template-placeholder">
+                                <i class="fas fa-image"></i>
+                                <span>Place neco-template.jpeg in assets/ folder</span>
+                            </div>
+                            <div class="overlay">
+                                <div class="ov-photo" id="necoOvPhoto">
+                                    <img src="" alt="" class="ov-photo-img" onerror="this.style.display='none';">
+                                </div>
+                                <div class="ov-text ov-name" data-field="name"></div>
+                                <div class="ov-text ov-year" data-field="year"></div>
+                                <div class="ov-text ov-examno" data-field="examno"></div>
+                                <div class="ov-text ov-class" data-field="class"></div>
+                                <div class="ov-table-area">
+                                    <div class="ov-table-body" data-field="subjects"></div>
+                                </div>
+                                <div class="ov-summary-area">
+                                    <span class="ov-count" data-field="count-a"></span>
+                                    <span class="ov-count" data-field="count-b"></span>
+                                    <span class="ov-count" data-field="count-c"></span>
+                                    <span class="ov-count" data-field="count-d"></span>
+                                    <span class="ov-count" data-field="count-e"></span>
+                                </div>
+                                <div class="ov-text ov-date" data-field="date"></div>
+                                <div class="ov-text ov-cert" data-field="cert"></div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial -->
+                        <div id="testimonialDoc" class="document-page" style="display:none;">
+                            <img class="template-img" src="assets/testimonial-template.jpeg" alt="Testimonial Template"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="template-placeholder">
+                                <i class="fas fa-image"></i>
+                                <span>Place testimonial-template.jpeg in assets/ folder</span>
+                            </div>
+                            <div class="overlay">
+                                <div class="ov-text ov-t-name" data-field="name"></div>
+                                <div class="ov-text ov-t-examno" data-field="examno"></div>
+                                <div class="ov-text ov-t-from" data-field="from"></div>
+                                <div class="ov-text ov-t-to" data-field="to"></div>
+                                <div class="ov-text ov-t-class-entered" data-field="class-entered"></div>
+                                <div class="ov-text ov-t-class-left" data-field="class-left"></div>
+                                <div class="ov-text ov-t-class" data-field="class"></div>
+                                <div class="ov-textarea ov-t-subjects" data-field="subjects"></div>
+                                <div class="ov-textarea ov-t-academic" data-field="academic"></div>
+                                <div class="ov-textarea ov-t-activities" data-field="activities"></div>
+                                <div class="ov-textarea ov-t-post" data-field="post"></div>
+                                <div class="ov-textarea ov-t-attitude" data-field="attitude"></div>
+                                <div class="ov-textarea ov-t-remarks" data-field="remarks"></div>
+                                <div class="ov-text ov-t-principal" data-field="principal"></div>
+                                <div class="ov-text ov-t-date" data-field="date"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </aside>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> School Settings</h2>
+                <button class="modal-close" id="settingsClose" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="settings-note">Stored in your browser only. Does not affect template images. The Principal name appears on the Testimonial document.</p>
+                <div class="form-group">
+                    <label for="setSchoolName">School Name</label>
+                    <input type="text" id="setSchoolName" value="Freedom International School">
+                </div>
+                <div class="form-group">
+                    <label for="setAddress">Address</label>
+                    <input type="text" id="setAddress" value="Kubwa, Abuja">
+                </div>
+                <div class="form-group">
+                    <label for="setMotto">Motto</label>
+                    <input type="text" id="setMotto" value="Education For True Freedom">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="setPhone1">Phone 1</label>
+                        <input type="text" id="setPhone1" value="0706 315 3466">
+                    </div>
+                    <div class="form-group">
+                        <label for="setPhone2">Phone 2</label>
+                        <input type="text" id="setPhone2" value="0913 240 6854">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="setPrincipal">Principal Name</label>
+                    <input type="text" id="setPrincipal" value="" placeholder="Appears on Testimonial">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="settingsCancel">Cancel</button>
+                <button class="btn btn-primary" id="settingsSave"><i class="fas fa-save"></i> Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
