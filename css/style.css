@@ -308,7 +308,7 @@ body {
        - Left grade reduced to 16mm so it centers exactly on the short line.
        - Right side kept roughly the same since you mentioned it looks good.
     */
-    grid-template-columns: 58mm 20mm 58mm 20mm;
+    grid-template-columns: 59mm 18mm 58mm 20mm;
     grid-template-rows: repeat(6, 7.4mm);
     align-items: center; 
     width: 100%;
