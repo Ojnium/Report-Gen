@@ -368,7 +368,9 @@
     /* ------------------------------------------
        PRINT — IFRAME APPROACH
        ------------------------------------------ */
-    window.printDocument = function () {
+        window.printDocument = function () {
+
+        /* --- Validation (unchanged) --- */
         if (currentDocType === 'waec' || currentDocType === 'neco') {
             var p = currentDocType;
             if (!document.getElementById(p+'Name').value.trim()) { showToast('Student Name is required','error'); focusField(p+'Name'); return; }
@@ -412,33 +414,81 @@
 
         cleanupPrintIframe();
 
-        printIframe = document.createElement('iframe');
-        printIframe.style.position = 'fixed';
-        printIframe.style.left = '-9999px';
-        printIframe.style.top = '0';
-        printIframe.style.width = '210mm';
-        printIframe.style.height = '297mm';
-        printIframe.style.border = 'none';
-        printIframe.setAttribute('aria-hidden', 'true');
-        document.body.appendChild(printIframe);
+        /*
+         * MOBILE FIX: Printing from an iframe on mobile browsers
+         * often produces a blank page.
+         *
+         * Solution: Open the generated HTML in a new browser tab instead.
+         * Mobile browsers treat new-tab documents as standalone pages and
+         * print them correctly, including background images.
+         *
+         * Desktop browsers continue using the iframe approach (faster, cleaner).
+         */
+        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-        var iWin = printIframe.contentWindow;
-        var iDoc = printIframe.contentDocument || iWin.document;
-        iDoc.open(); iDoc.write(html); iDoc.close();
+        if (isMobile) {
+            /* Open in a new tab, wait for image to load, then print */
+            var blob = new Blob([html], { type: 'text/html' });
+            var blobUrl = URL.createObjectURL(blob);
 
-        var iImg = iDoc.querySelector('.template-img');
-        function doPrint() { setTimeout(function () { iWin.focus(); iWin.print(); }, 400); }
+            var printWin = window.open(blobUrl, '_blank', 'width=210mm,height=297mm');
 
-        if (iImg.complete && iImg.naturalHeight > 0) { doPrint(); }
-        else {
-            iImg.onload = doPrint;
-            iImg.onerror = function () { showToast('Failed to load template image','error'); cleanupPrintIframe(); };
+            if (!printWin) {
+                showToast('Please allow pop-ups for printing', 'warning');
+                setTimeout(function () { URL.revokeObjectURL(blobUrl); }, 5000);
+                return;
+            }
+
+            printWin.onload = function () {
+                setTimeout(function () {
+                    printWin.focus();
+                    printWin.print();
+                    setTimeout(function () {
+                        printWin.close();
+                        URL.revokeObjectURL(blobUrl);
+                        cleanupPrintIframe();
+                    }, 1000);
+                }, 400);
+            };
+
+            printWin.onerror = function () {
+                showToast('Failed to open print preview', 'error');
+                URL.revokeObjectURL(blobUrl);
+                cleanupPrintIframe();
+            };
+
+        } else {
+            /* Desktop: use the iframe approach */
+            printIframe = document.createElement('iframe');
+            printIframe.style.position = 'fixed';
+            printIframe.style.left = '-9999px';
+            printIframe.style.top = '0';
+            printIframe.style.width = '210mm';
+            printIframe.style.height = '297mm';
+            printIframe.style.border = 'none';
+            printIframe.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(printIframe);
+
+            var iWin = printIframe.contentWindow;
+            var iDoc = printIframe.contentDocument || iWin.document;
+            iDoc.open(); iDoc.write(html); iDoc.close();
+
+            var iImg = iDoc.querySelector('.template-img');
+            function doPrint() {
+                setTimeout(function () { iWin.focus(); iWin.print(); }, 400);
+            }
+
+            if (iImg.complete && iImg.naturalHeight > 0) { doPrint(); }
+            else {
+                iImg.onload = doPrint;
+                iImg.onerror = function () { showToast('Failed to load template image','error'); cleanupPrintIframe(); };
+            }
+
+            function onAfter() { setTimeout(cleanupPrintIframe, 500); }
+            if (iWin.addEventListener) iWin.addEventListener('afterprint', onAfter);
+            window.addEventListener('afterprint', onAfter);
+            setTimeout(cleanupPrintIframe, 30000);
         }
-
-        function onAfter() { setTimeout(cleanupPrintIframe, 500); }
-        if (iWin.addEventListener) iWin.addEventListener('afterprint', onAfter);
-        window.addEventListener('afterprint', onAfter);
-        setTimeout(cleanupPrintIframe, 30000);
     };
 
     /* ------------------------------------------
