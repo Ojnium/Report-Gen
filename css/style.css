@@ -299,40 +299,39 @@ body {
 }
 
 /* 2. Fix the grid layout with adjusted column widths */
+/* ============================================================
+   TABLE AREA - FINAL STRUCTURAL FIX
+   ============================================================ */
+
 #waecDoc .ov-table-body,
 #necoDoc .ov-table-body {
     display: grid;
     /* 
-       1st value (52mm): Left Subject width. (Decrease this to move the left grade further LEFT).
-       2nd value (20mm): Left Grade width.
-       3rd value (63mm): Right Subject width. 
-       4th value (20mm): Right Grade width.
+       Left Half: 54mm + 24mm = 78mm (Ends exactly at the center line)
+       Right Half: 55mm + 23mm = 78mm 
+       This prevents the 3rd column from ever crossing the middle divider.
     */
-    grid-template-columns: 52mm 20mm 63mm 20mm;
+    grid-template-columns: 54mm 24mm 55mm 23mm;
     grid-template-rows: repeat(6, 7.4mm);
     align-items: center; 
     width: 100%;
 }
 
-/* Nudge ONLY the 3rd column (Right Subject) to the right */
-#waecDoc .ov-table-body > div:nth-child(4n+3),
-#necoDoc .ov-table-body > div:nth-child(4n+3) {
-    padding-left: 8mm; 
-}
-
+/* 3. Subject styling - Pushed slightly right so it doesn't touch the line */
 #waecDoc .ov-neco-subj,
 #necoDoc .ov-neco-subj {
     font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 13pt; 
+    font-size: 13pt;
     font-weight: bold;
     color: #000; 
-    padding-left: 2mm;
+    padding-left: 4mm; /* This guarantees the text stays off the left vertical lines */
     white-space: nowrap; 
     overflow: hidden; 
     text-overflow: ellipsis;
-    line-height: 1; /* Prevents text from pushing the row height */
+    line-height: 1; 
 }
 
+/* 4. Grade styling - Kept strictly centered inside its column */
 #waecDoc .ov-neco-grade,
 #necoDoc .ov-neco-grade {
     text-align: center; 
@@ -342,7 +341,6 @@ body {
     color: #000;
     line-height: 1;
 }
-
 #waecDoc .ov-summary-area { position: absolute; top: 239mm; left: 52mm; display: flex; gap: 31mm; }
 #waecDoc .ov-count {
     font-family: 'Times New Roman', Times, Georgia, serif;
