@@ -314,6 +314,12 @@ body {
     width: 100%;
 }
 
+/* Nudge ONLY the 3rd column (Right Subject) to the right */
+#waecDoc .ov-table-body > div:nth-child(4n+3),
+#necoDoc .ov-table-body > div:nth-child(4n+3) {
+    padding-left: 8mm; 
+}
+
 #waecDoc .ov-neco-subj,
 #necoDoc .ov-neco-subj {
     font-family: 'Times New Roman', Times, Georgia, serif;
