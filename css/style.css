@@ -303,12 +303,12 @@ body {
 #necoDoc .ov-table-body {
     display: grid;
     /* 
-       Columns: [Left Subject] [Left Grade] [Right Subject] [Right Grade] 
-       - Left subject increased to 61mm to push the left grade further right.
-       - Left grade reduced to 16mm so it centers exactly on the short line.
-       - Right side kept roughly the same since you mentioned it looks good.
+       1st value (52mm): Left Subject width. (Decrease this to move the left grade further LEFT).
+       2nd value (20mm): Left Grade width.
+       3rd value (63mm): Right Subject width. 
+       4th value (20mm): Right Grade width.
     */
-    grid-template-columns: 59mm 18mm 58mm 20mm;
+    grid-template-columns: 52mm 20mm 63mm 20mm;
     grid-template-rows: repeat(6, 7.4mm);
     align-items: center; 
     width: 100%;
