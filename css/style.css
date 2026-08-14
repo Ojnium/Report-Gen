@@ -303,18 +303,45 @@ body {
    TABLE AREA - FINAL STRUCTURAL FIX
    ============================================================ */
 
+/* ============================================================
+   TABLE AREA - INDEPENDENT COLUMN NUDGING
+   ============================================================ */
+
 #waecDoc .ov-table-body,
 #necoDoc .ov-table-body {
     display: grid;
-    /* 
-       Left Half: 54mm + 24mm = 78mm (Ends exactly at the center line)
-       Right Half: 55mm + 23mm = 78mm 
-       This prevents the 3rd column from ever crossing the middle divider.
-    */
-    grid-template-columns: 54mm 24mm 55mm 23mm;
+    /* A balanced baseline grid */
+    grid-template-columns: 55mm 22mm 58mm 20mm; 
     grid-template-rows: repeat(6, 7.4mm);
     align-items: center; 
     width: 100%;
+}
+
+/* 1. First Column (Left Subject) */
+#waecDoc .ov-table-body > div:nth-child(4n+1),
+#necoDoc .ov-table-body > div:nth-child(4n+1) {
+    padding-left: 2mm;
+}
+
+/* 2. Second Column (Left Grade) - Pulling it LEFT */
+#waecDoc .ov-table-body > div:nth-child(4n+2),
+#necoDoc .ov-table-body > div:nth-child(4n+2) {
+    position: relative;
+    left: -8mm; /* Slides the grade left, away from the middle line */
+}
+
+/* 3. Third Column (Right Subject) - Pushing it RIGHT */
+#waecDoc .ov-table-body > div:nth-child(4n+3),
+#necoDoc .ov-table-body > div:nth-child(4n+3) {
+    position: relative;
+    left: 8mm; /* Slides the subject right, away from the middle line */
+}
+
+/* 4. Fourth Column (Right Grade) */
+#waecDoc .ov-table-body > div:nth-child(4n+4),
+#necoDoc .ov-table-body > div:nth-child(4n+4) {
+    position: relative;
+    left: -2mm; /* Tiny nudge left to center it on the right line */
 }
 
 /* 3. Subject styling - Pushed slightly right so it doesn't touch the line */
