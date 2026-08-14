@@ -307,66 +307,179 @@ body {
    TABLE AREA - INDEPENDENT COLUMN NUDGING
    ============================================================ */
 
+/* ============================================================
+   WAEC / NECO TABLE
+   DO NOT USE position: relative OR left NUDGES
+   ============================================================ */
+
 #waecDoc .ov-table-body,
 #necoDoc .ov-table-body {
     display: grid;
-    /* A balanced baseline grid */
-    grid-template-columns: 55mm 22mm 58mm 20mm; 
+
+    /*
+       4 actual columns:
+
+       SUBJECT | GRADE | SUBJECT | GRADE
+    */
+
+    grid-template-columns:
+        55mm
+        22mm
+        58mm
+        20mm;
+
     grid-template-rows: repeat(6, 7.4mm);
-    align-items: center; 
-    width: 100%;
+
+    width: 155mm;
+    height: 44.4mm;
+
+    align-items: center;
+    justify-items: stretch;
+
+    margin: 0;
+    padding: 0;
 }
 
-/* 1. First Column (Left Subject) */
+
+/* ============================================================
+   ALL CELLS
+   ============================================================ */
+
+#waecDoc .ov-table-body > div,
+#necoDoc .ov-table-body > div {
+    position: static !important;
+
+    margin: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+
+    height: 7.4mm;
+
+    display: flex;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   LEFT SUBJECT
+   ============================================================ */
+
 #waecDoc .ov-table-body > div:nth-child(4n+1),
 #necoDoc .ov-table-body > div:nth-child(4n+1) {
-    padding-left: 2mm;
+    padding-left: 2mm !important;
+    padding-right: 1mm !important;
+
+    justify-content: flex-start;
 }
 
-/* 2. Second Column (Left Grade) - Pulling it LEFT */
+
+/* ============================================================
+   LEFT GRADE
+   ============================================================ */
+
 #waecDoc .ov-table-body > div:nth-child(4n+2),
 #necoDoc .ov-table-body > div:nth-child(4n+2) {
-    position: relative;
-    left: -10mm; /* Slides the grade left, away from the middle line */
+    padding: 0 !important;
+
+    justify-content: center;
+
+    text-align: center;
 }
 
-/* 3. Third Column (Right Subject) - Pushing it RIGHT */
+
+/* ============================================================
+   RIGHT SUBJECT
+   ============================================================ */
+
 #waecDoc .ov-table-body > div:nth-child(4n+3),
 #necoDoc .ov-table-body > div:nth-child(4n+3) {
-    position: relative;
-    left: 8mm; /* Slides the subject right, away from the middle line */
+    padding-left: 2mm !important;
+    padding-right: 1mm !important;
+
+    justify-content: flex-start;
 }
 
-/* 4. Fourth Column (Right Grade) */
+
+/* ============================================================
+   RIGHT GRADE
+   ============================================================ */
+
 #waecDoc .ov-table-body > div:nth-child(4n+4),
 #necoDoc .ov-table-body > div:nth-child(4n+4) {
-    position: relative;
-    left: -2mm; /* Tiny nudge left to center it on the right line */
+    padding: 0 !important;
+
+    justify-content: center;
+
+    text-align: center;
 }
 
-/* 3. Subject styling - Pushed slightly right so it doesn't touch the line */
+
+/* ============================================================
+   SUBJECT TEXT
+   ============================================================ */
+
 #waecDoc .ov-neco-subj,
 #necoDoc .ov-neco-subj {
-    font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 13pt;
+    display: block;
+
+    width: 100%;
+
+    font-family:
+        "Times New Roman",
+        Times,
+        Georgia,
+        serif;
+
+    font-size: 10pt;
     font-weight: bold;
-    color: #000; 
-    padding-left: 4mm; /* This guarantees the text stays off the left vertical lines */
-    white-space: nowrap; 
-    overflow: hidden; 
+
+    color: #000;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-    line-height: 1; 
+
+    line-height: 1;
+
+    text-align: left;
 }
 
-/* 4. Grade styling - Kept strictly centered inside its column */
+
+/* ============================================================
+   GRADE TEXT
+   ============================================================ */
+
 #waecDoc .ov-neco-grade,
 #necoDoc .ov-neco-grade {
-    text-align: center; 
-    font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 13pt; 
-    font-weight: bold; 
+    display: block;
+
+    width: 100%;
+
+    font-family:
+        "Times New Roman",
+        Times,
+        Georgia,
+        serif;
+
+    font-size: 10pt;
+    font-weight: bold;
+
     color: #000;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
     line-height: 1;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
 }
 #waecDoc .ov-summary-area { position: absolute; top: 239mm; left: 52mm; display: flex; gap: 31mm; }
 #waecDoc .ov-count {
