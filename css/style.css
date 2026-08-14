@@ -314,7 +314,7 @@ body {
 */
 #waecDoc .ov-table-body > div:nth-child(4n+3),
 #necoDoc .ov-table-body > div:nth-child(4n+3) {
-    padding-left: 5mm; /* Increase or decrease this to perfectly clear the line */
+    padding-left: 15mm; /* Increase or decrease this to perfectly clear the line */
     box-sizing: border-box; /* Crucial: Ensures padding doesn't widen the column */
 }
 
