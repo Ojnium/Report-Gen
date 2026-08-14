@@ -312,12 +312,11 @@ body {
   Target ONLY the 3rd column (Right Subject) 
   This nudges the text right, away from the middle line.
 */
-#waecDoc .ov-table-body > div:nth-child(4n+3),
-#necoDoc .ov-table-body > div:nth-child(4n+3) {
-    padding-left: 15mm; /* Increase or decrease this to perfectly clear the line */
-    box-sizing: border-box; /* Crucial: Ensures padding doesn't widen the column */
+#waecDoc .ov-table-body > span:nth-child(4n+3),
+#necoDoc .ov-table-body > span:nth-child(4n+3) {
+    padding-left: 6mm; /* Try 6mm first. 15mm might push it too far right! */
+    box-sizing: border-box; 
 }
-
 /* Subject cells: left-aligned within their columns */
 #waecDoc .ov-neco-subj,
 #necoDoc .ov-neco-subj {
