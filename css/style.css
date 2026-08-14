@@ -327,7 +327,7 @@ body {
 #waecDoc .ov-table-body > div:nth-child(4n+2),
 #necoDoc .ov-table-body > div:nth-child(4n+2) {
     position: relative;
-    left: -8mm; /* Slides the grade left, away from the middle line */
+    left: -10mm; /* Slides the grade left, away from the middle line */
 }
 
 /* 3. Third Column (Right Subject) - Pushing it RIGHT */
