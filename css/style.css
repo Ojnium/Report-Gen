@@ -259,9 +259,15 @@ body {
 }
 
 .ov-text {
-    position: absolute; font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 11pt; color: #000; line-height: 1.3;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    position: absolute;
+    font-family: 'Times New Roman', Times, Georgia, serif;
+    font-size: 13pt;
+    font-weight: bold;
+    color: #000;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ov-textarea {
@@ -292,22 +298,26 @@ body {
     position: absolute; top: 187mm; left: 29mm; width: 155mm; height: 45mm; overflow: hidden;
 }
 
-/* Shared 4-column grid rules for both WAEC and NECO */
+/* 2. Fix the grid layout with adjusted column widths */
 #waecDoc .ov-table-body,
 #necoDoc .ov-table-body {
     display: grid;
-    /* Precise column widths mapped to the template lines */
-    grid-template-columns: 55mm 27mm 53mm 20mm;
-    /* Force exactly 6 rows, spaced to match the background lines */
+    /* 
+       Columns: [Left Subject] [Left Grade] [Right Subject] [Right Grade] 
+       - Left subject increased to 61mm to push the left grade further right.
+       - Left grade reduced to 16mm so it centers exactly on the short line.
+       - Right side kept roughly the same since you mentioned it looks good.
+    */
+    grid-template-columns: 61mm 16mm 58mm 20mm;
     grid-template-rows: repeat(6, 7.4mm);
-    align-items: center; /* Centers the text perfectly on the line */
+    align-items: center; 
     width: 100%;
 }
 
 #waecDoc .ov-neco-subj,
 #necoDoc .ov-neco-subj {
     font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 10pt; 
+    font-size: 13pt; 
     color: #000; 
     padding-left: 2mm;
     white-space: nowrap; 
@@ -320,7 +330,7 @@ body {
 #necoDoc .ov-neco-grade {
     text-align: center; 
     font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 10pt; 
+    font-size: 13pt; 
     font-weight: bold; 
     color: #000;
     line-height: 1;
@@ -329,7 +339,7 @@ body {
 #waecDoc .ov-summary-area { position: absolute; top: 239mm; left: 52mm; display: flex; gap: 31mm; }
 #waecDoc .ov-count {
     font-family: 'Times New Roman', Times, Georgia, serif;
-    font-size: 11pt; font-weight: bold; color: #000;
+    font-size: 13pt; font-weight: bold; color: #000;
 }
 
 #waecDoc .ov-date { top: 261mm; left: 155mm; width: 50mm; font-size: 10pt; }
