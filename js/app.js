@@ -427,25 +427,39 @@
         var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
         if (isMobile) {
-            /* 
-             * MOBILE FIX: Mobile browsers block Blob URLs and popup windows.
-             * Solution: Hide the main UI, render the document directly to the body, 
-             * trigger window.print(), and restore the UI afterward.
+            /*
+             * MOBILE FIX: iOS Safari only allows window.print() to fire when
+             * it's still directly tied to the user's tap. The previous version
+             * wrapped print() in a setTimeout, which breaks that association and
+             * makes it silently no-op. It also built a brand-new <img> and waited
+             * on its onload before printing — an extra async gap that caused the
+             * same problem even before the timer was added.
+             *
+             * Fix: clone the template image that's already loaded in the on-screen
+             * preview (tImg — validated above as complete before we got here), so
+             * there's nothing left to wait on, and call window.print() synchronously.
+             *
+             * The clone is named #print-clone (not an ad-hoc id) so it's covered by
+             * the existing safety net in print.css (body > #print-clone), in case
+             * 'afterprint' never fires and the JS cleanup below doesn't run.
              */
             var appUI = document.querySelector('.dashboard');
             appUI.style.display = 'none'; // Hide the main app
 
-            // Create a temporary container for the print document
             var mobilePrintDiv = document.createElement('div');
-            mobilePrintDiv.id = 'mobile-print-container';
+            mobilePrintDiv.id = 'print-clone';
             mobilePrintDiv.style.cssText = 'position:absolute; top:0; left:0; width:210mm; height:297mm; background:#fff; overflow:hidden; z-index:9999;';
 
-            // Reconstruct the document safely inside the current DOM
-            mobilePrintDiv.innerHTML = '<div class="document-page" style="display:block!important; box-shadow:none; margin:0; transform:none;">' + 
-                                       '<img class="template-img" src="' + imgUrl + '" style="position:absolute;top:0;left:0;width:210mm;height:297mm;z-index:1;object-fit:fill;">' + 
-                                       overlayHtml + 
-                                       '</div>';
-            
+            var wrapper = document.createElement('div');
+            wrapper.className = 'document-page';
+            wrapper.style.cssText = 'display:block!important; box-shadow:none; margin:0; transform:none;';
+
+            var clonedImg = tImg.cloneNode(true);
+            clonedImg.style.cssText = 'position:absolute;top:0;left:0;width:210mm;height:297mm;z-index:1;object-fit:fill;';
+            wrapper.appendChild(clonedImg);
+            wrapper.insertAdjacentHTML('beforeend', overlayHtml);
+            mobilePrintDiv.appendChild(wrapper);
+
             document.body.appendChild(mobilePrintDiv);
 
             // Temporarily enforce print media styles
@@ -453,33 +467,19 @@
             printStyle.innerHTML = '@page { size: A4 portrait; margin: 0; } body { margin: 0; padding: 0; background: #fff; }';
             document.head.appendChild(printStyle);
 
-            var tImgCheck = mobilePrintDiv.querySelector('.template-img');
-
-            function executeMobilePrint() {
-                setTimeout(function() {
-                    window.print();
-                    
-                    // Restore the UI after the native print dialog closes
-                    setTimeout(function() {
-                        if (document.body.contains(mobilePrintDiv)) document.body.removeChild(mobilePrintDiv);
-                        if (document.head.contains(printStyle)) document.head.removeChild(printStyle);
-                        appUI.style.display = 'flex';
-                    }, 1000);
-                }, 500);
+            function restoreMobileUI() {
+                if (document.body.contains(mobilePrintDiv)) document.body.removeChild(mobilePrintDiv);
+                if (document.head.contains(printStyle)) document.head.removeChild(printStyle);
+                appUI.style.display = 'flex';
             }
 
-            // Ensure the image is fully loaded before triggering the print prompt
-            if (tImgCheck.complete && tImgCheck.naturalHeight > 0) {
-                executeMobilePrint();
-            } else {
-                tImgCheck.onload = executeMobilePrint;
-                tImgCheck.onerror = function() {
-                    showToast('Failed to load image for printing', 'error');
-                    document.body.removeChild(mobilePrintDiv);
-                    document.head.removeChild(printStyle);
-                    appUI.style.display = 'flex';
-                };
-            }
+            window.addEventListener('afterprint', restoreMobileUI, { once: true });
+            // Fallback in case 'afterprint' doesn't fire (inconsistent on some mobile browsers)
+            setTimeout(restoreMobileUI, 5000);
+
+            // No delay: clonedImg is already loaded, so this still runs inside
+            // the original tap's gesture window.
+            window.print();
         } else {
             /* Desktop: use the iframe approach (Keep your existing desktop code below) */
             /* Desktop: use the iframe approach */
