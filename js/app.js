@@ -426,47 +426,60 @@
          */
         var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-                if (isMobile) {
-                    var appUI = document.querySelector('.dashboard');
-                    appUI.style.display = 'none';
-                
-                    var mobilePrintDiv = document.createElement('div');
-                    mobilePrintDiv.id = 'mobile-print-container';
-                    mobilePrintDiv.style.cssText = 'position:absolute; top:0; left:0; width:210mm; height:297mm; background:#fff; overflow:hidden; z-index:9999;';
-                
-                    var wrapper = document.createElement('div');
-                    wrapper.className = 'document-page';
-                    wrapper.style.cssText = 'display:block!important; box-shadow:none; margin:0; transform:none;';
-                
-                    // Clone the ALREADY-LOADED preview image instead of creating a new one.
-                    // This avoids waiting on an async image load, which was breaking
-                    // window.print() on iOS by disconnecting it from the user's tap.
-                    var clonedImg = tImg.cloneNode(true);
-                    clonedImg.style.cssText = 'position:absolute;top:0;left:0;width:210mm;height:297mm;z-index:1;object-fit:fill;';
-                    wrapper.appendChild(clonedImg);
-                    wrapper.insertAdjacentHTML('beforeend', overlayHtml);
-                    mobilePrintDiv.appendChild(wrapper);
-                
-                    document.body.appendChild(mobilePrintDiv);
-                
-                    var printStyle = document.createElement('style');
-                    printStyle.innerHTML = '@page { size: A4 portrait; margin: 0; } body { margin: 0; padding: 0; background: #fff; }';
-                    document.head.appendChild(printStyle);
-                
-                    function restoreUI() {
+        if (isMobile) {
+            /* 
+             * MOBILE FIX: Mobile browsers block Blob URLs and popup windows.
+             * Solution: Hide the main UI, render the document directly to the body, 
+             * trigger window.print(), and restore the UI afterward.
+             */
+            var appUI = document.querySelector('.dashboard');
+            appUI.style.display = 'none'; // Hide the main app
+
+            // Create a temporary container for the print document
+            var mobilePrintDiv = document.createElement('div');
+            mobilePrintDiv.id = 'mobile-print-container';
+            mobilePrintDiv.style.cssText = 'position:absolute; top:0; left:0; width:210mm; height:297mm; background:#fff; overflow:hidden; z-index:9999;';
+
+            // Reconstruct the document safely inside the current DOM
+            mobilePrintDiv.innerHTML = '<div class="document-page" style="display:block!important; box-shadow:none; margin:0; transform:none;">' + 
+                                       '<img class="template-img" src="' + imgUrl + '" style="position:absolute;top:0;left:0;width:210mm;height:297mm;z-index:1;object-fit:fill;">' + 
+                                       overlayHtml + 
+                                       '</div>';
+            
+            document.body.appendChild(mobilePrintDiv);
+
+            // Temporarily enforce print media styles
+            var printStyle = document.createElement('style');
+            printStyle.innerHTML = '@page { size: A4 portrait; margin: 0; } body { margin: 0; padding: 0; background: #fff; }';
+            document.head.appendChild(printStyle);
+
+            var tImgCheck = mobilePrintDiv.querySelector('.template-img');
+
+            function executeMobilePrint() {
+                setTimeout(function() {
+                    window.print();
+                    
+                    // Restore the UI after the native print dialog closes
+                    setTimeout(function() {
                         if (document.body.contains(mobilePrintDiv)) document.body.removeChild(mobilePrintDiv);
                         if (document.head.contains(printStyle)) document.head.removeChild(printStyle);
                         appUI.style.display = 'flex';
-                    }
-                
-                    window.addEventListener('afterprint', restoreUI, { once: true });
-                    // Fallback in case 'afterprint' never fires (inconsistent on some mobile browsers)
-                    setTimeout(restoreUI, 5000);
-                
-                    // Call print() with no delay — everything above is synchronous now,
-                    // so this still runs inside the original tap's gesture window.
-                    window.print();
-                }
+                    }, 1000);
+                }, 500);
+            }
+
+            // Ensure the image is fully loaded before triggering the print prompt
+            if (tImgCheck.complete && tImgCheck.naturalHeight > 0) {
+                executeMobilePrint();
+            } else {
+                tImgCheck.onload = executeMobilePrint;
+                tImgCheck.onerror = function() {
+                    showToast('Failed to load image for printing', 'error');
+                    document.body.removeChild(mobilePrintDiv);
+                    document.head.removeChild(printStyle);
+                    appUI.style.display = 'flex';
+                };
+            }
         } else {
             /* Desktop: use the iframe approach (Keep your existing desktop code below) */
             /* Desktop: use the iframe approach */
