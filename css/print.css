@@ -6,19 +6,15 @@
    safety net for direct Ctrl+P from the
    main page.
    ============================================ */
-
 @page {
     size: A4 portrait;
     margin: 0;
 }
-
 @media print {
-
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-
     html,
     body {
         margin: 0 !important;
@@ -28,21 +24,51 @@
         background: #fff !important;
         overflow: hidden !important;
     }
-
     /* Hide the main dashboard */
     body > .dashboard,
     body > .modal-overlay,
     body > .toast-container {
         display: none !important;
     }
-
     /* Hide any leftover print clones */
     body > #print-clone {
         display: none !important;
     }
-
     /* Hide iframes (the iframe handles its own print) */
     iframe {
         display: none !important;
+    }
+
+    /* ============================================
+       MOBILE PRINT ISOLATION
+       Used by the mobile branch of printDocument() in app.js.
+       Standard "print only this element" pattern: hide
+       everything via `visibility` (which keeps layout/height
+       intact, unlike `display:none`), then re-reveal only the
+       active document and its children. This lets us print the
+       real, already-rendering live-preview element directly
+       instead of rebuilding a separate print document.
+
+       NOTE: this block only applies when body has the
+       `.mobile-printing` class (set by app.js right before
+       calling window.print() on mobile) — it does not affect
+       desktop printing or plain Ctrl+P, which are handled by
+       the rules above and the iframe approach.
+       ============================================ */
+    body.mobile-printing * {
+        visibility: hidden !important;
+    }
+    body.mobile-printing .document-page.mobile-print-target,
+    body.mobile-printing .document-page.mobile-print-target * {
+        visibility: visible !important;
+    }
+    body.mobile-printing .document-page.mobile-print-target {
+        display: block !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
     }
 }
