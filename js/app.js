@@ -439,15 +439,17 @@
              * preview (tImg — validated above as complete before we got here), so
              * there's nothing left to wait on, and call window.print() synchronously.
              *
-             * The clone is named #print-clone (not an ad-hoc id) so it's covered by
-             * the existing safety net in print.css (body > #print-clone), in case
-             * 'afterprint' never fires and the JS cleanup below doesn't run.
+             * NOTE: do NOT name this element #print-clone — print.css has a rule
+             * (body > #print-clone { display:none !important }) that unconditionally
+             * hides that id during every print event, not just leftover ones. Using
+             * that id here makes the print dialog open with a blank page, since the
+             * one thing on the page gets hidden by print.css itself.
              */
             var appUI = document.querySelector('.dashboard');
             appUI.style.display = 'none'; // Hide the main app
 
             var mobilePrintDiv = document.createElement('div');
-            mobilePrintDiv.id = 'print-clone';
+            mobilePrintDiv.id = 'mobile-print-active';
             mobilePrintDiv.style.cssText = 'position:absolute; top:0; left:0; width:210mm; height:297mm; background:#fff; overflow:hidden; z-index:9999;';
 
             var wrapper = document.createElement('div');
