@@ -428,59 +428,37 @@
 
         if (isMobile) {
             /*
-             * MOBILE FIX: iOS Safari only allows window.print() to fire when
-             * it's still directly tied to the user's tap. The previous version
-             * wrapped print() in a setTimeout, which breaks that association and
-             * makes it silently no-op. It also built a brand-new <img> and waited
-             * on its onload before printing — an extra async gap that caused the
-             * same problem even before the timer was added.
+             * MOBILE PRINT — print-isolation technique.
              *
-             * Fix: clone the template image that's already loaded in the on-screen
-             * preview (tImg — validated above as complete before we got here), so
-             * there's nothing left to wait on, and call window.print() synchronously.
+             * Earlier versions tried to build a separate, absolutely-positioned
+             * clone of the document to print. That kept failing in different ways
+             * (blank print preview, id collisions with print.css) because cloning
+             * a fresh DOM subtree and positioning it outside the normal page flow
+             * is fragile across mobile print engines.
              *
-             * NOTE: do NOT name this element #print-clone — print.css has a rule
-             * (body > #print-clone { display:none !important }) that unconditionally
-             * hides that id during every print event, not just leftover ones. Using
-             * that id here makes the print dialog open with a blank page, since the
-             * one thing on the page gets hidden by print.css itself.
+             * This version prints the REAL, already-rendering preview element
+             * directly — the exact thing you see on screen — using the standard
+             * "print only this element" CSS pattern: hide everything via
+             * `visibility` (not `display`, which would collapse page layout),
+             * then re-reveal only the active document. See the
+             * `body.mobile-printing` rules in print.css.
              */
-            var appUI = document.querySelector('.dashboard');
-            appUI.style.display = 'none'; // Hide the main app
-
-            var mobilePrintDiv = document.createElement('div');
-            mobilePrintDiv.id = 'mobile-print-active';
-            mobilePrintDiv.style.cssText = 'position:absolute; top:0; left:0; width:210mm; height:297mm; background:#fff; overflow:hidden; z-index:9999;';
-
-            var wrapper = document.createElement('div');
-            wrapper.className = 'document-page';
-            wrapper.style.cssText = 'display:block!important; box-shadow:none; margin:0; transform:none;';
-
-            var clonedImg = tImg.cloneNode(true);
-            clonedImg.style.cssText = 'position:absolute;top:0;left:0;width:210mm;height:297mm;z-index:1;object-fit:fill;';
-            wrapper.appendChild(clonedImg);
-            wrapper.insertAdjacentHTML('beforeend', overlayHtml);
-            mobilePrintDiv.appendChild(wrapper);
-
-            document.body.appendChild(mobilePrintDiv);
-
-            // Temporarily enforce print media styles
-            var printStyle = document.createElement('style');
-            printStyle.innerHTML = '@page { size: A4 portrait; margin: 0; } body { margin: 0; padding: 0; background: #fff; }';
-            document.head.appendChild(printStyle);
+            activeDoc.classList.add('mobile-print-target');
+            activeDoc.style.transform = 'none'; // preview is scaled down on screen; print at full size
+            document.body.classList.add('mobile-printing');
 
             function restoreMobileUI() {
-                if (document.body.contains(mobilePrintDiv)) document.body.removeChild(mobilePrintDiv);
-                if (document.head.contains(printStyle)) document.head.removeChild(printStyle);
-                appUI.style.display = 'flex';
+                document.body.classList.remove('mobile-printing');
+                activeDoc.classList.remove('mobile-print-target');
+                updatePreviewScale(); // recompute the on-screen preview scale
             }
 
             window.addEventListener('afterprint', restoreMobileUI, { once: true });
             // Fallback in case 'afterprint' doesn't fire (inconsistent on some mobile browsers)
             setTimeout(restoreMobileUI, 5000);
 
-            // No delay: clonedImg is already loaded, so this still runs inside
-            // the original tap's gesture window.
+            // No delay: activeDoc is already fully rendered, so this still runs
+            // inside the original tap's gesture window.
             window.print();
         } else {
             /* Desktop: use the iframe approach (Keep your existing desktop code below) */
