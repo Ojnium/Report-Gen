@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
 
@@ -72,7 +73,7 @@
                                     <input type="number" id="waecYear" min="1990" max="2099" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="waecClass">Class</label>
+                                    <label for="waecClass">Class <span class="required">*</span></label>
                                     <input type="text" id="waecClass" placeholder="e.g. SSS 3A" required>
                                 </div>
                             </div>
@@ -116,6 +117,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn btn-primary" onclick="printDocument()"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" class="btn btn-secondary" id="waecDownloadImg" onclick="downloadAsImage()"><i class="fas fa-image"></i> Download Image</button>
                             <button type="button" class="btn btn-danger" onclick="clearForm('waec')"><i class="fas fa-eraser"></i> Clear</button>
                         </div>
                     </form>
@@ -135,7 +137,7 @@
                                     <input type="number" id="necoYear" min="1990" max="2099" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="necoClass">Class</label>
+                                    <label for="necoClass">Class <span class="required">*</span></label>
                                     <input type="text" id="necoClass" placeholder="e.g. SSS 3A" required>
                                 </div>
                             </div>
@@ -178,6 +180,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn btn-primary" onclick="printDocument()"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" class="btn btn-secondary" id="necoDownloadImg" onclick="downloadAsImage()"><i class="fas fa-image"></i> Download Image</button>
                             <button type="button" class="btn btn-danger" onclick="clearForm('neco')"><i class="fas fa-eraser"></i> Clear</button>
                         </div>
                     </form>
@@ -248,6 +251,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="button" class="btn btn-primary" onclick="printDocument()"><i class="fas fa-print"></i> Print</button>
+                            <button type="button" class="btn btn-secondary" id="testimonialDownloadImg" onclick="downloadAsImage()"><i class="fas fa-image"></i> Download Image</button>
                             <button type="button" class="btn btn-danger" onclick="clearForm('testimonial')"><i class="fas fa-eraser"></i> Clear</button>
                         </div>
                     </form>
