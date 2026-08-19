@@ -21,9 +21,7 @@
     var DEFAULT_SUBJECTS = [
         'English Language', 'Mathematics', 'Physics',
         'Chemistry', 'Biology', 'Civic Education',
-        'Economics', 'Geography' ,'Lifestock Farming',
-        'Lit. in English', 'CRS', 'Islamic Studies',
-        'Government'
+        'Economics', 'Geography'
     ];
 
     var GRADE_OPTIONS = ['A1','B2','B3','C4','C5','C6','D7','E8','F9'];
@@ -378,7 +376,7 @@
             if (!document.getElementById(p+'Name').value.trim()) { showToast('Student Name is required','error'); focusField(p+'Name'); return; }
             if (!document.getElementById(p+'Year').value.trim()) { showToast('Examination Year is required','error'); focusField(p+'Year'); return; }
             if (!document.getElementById(p+'ExamNo').value.trim()) { showToast('Examination Number is required','error'); focusField(p+'ExamNo'); return; }
-            
+            if (!document.getElementById(p+'Class').value.trim()) { showToast('Class is required','error'); focusField(p+'Class'); return; }
             var rs = document.querySelectorAll('#'+p+'Subjects .subject-row'), has = false;
             for (var i=0;i<rs.length;i++) { if (rs[i].querySelector('input').value.trim()) { has=true; break; } }
             if (!has) { showToast('Enter at least one subject','error'); return; }
@@ -495,6 +493,93 @@
             window.addEventListener('afterprint', onAfter);
             setTimeout(cleanupPrintIframe, 30000);
         }
+    };
+
+    /* ------------------------------------------
+       DOWNLOAD AS IMAGE (JPEG)
+       Renders the finished document (template + text
+       overlay) onto a single flat canvas via html2canvas,
+       then exports that as one JPEG file. Because the
+       output is one flat raster image, there's no separate
+       text layer for a printer driver to drop — this avoids
+       the text-over-image compositing bug entirely.
+       ------------------------------------------ */
+    window.downloadAsImage = function () {
+
+        /* Same validation as printDocument */
+        if (currentDocType === 'waec' || currentDocType === 'neco') {
+            var p = currentDocType;
+            if (!document.getElementById(p+'Name').value.trim()) { showToast('Student Name is required','error'); focusField(p+'Name'); return; }
+            if (!document.getElementById(p+'Year').value.trim()) { showToast('Examination Year is required','error'); focusField(p+'Year'); return; }
+            if (!document.getElementById(p+'ExamNo').value.trim()) { showToast('Examination Number is required','error'); focusField(p+'ExamNo'); return; }
+            var rs = document.querySelectorAll('#'+p+'Subjects .subject-row'), has = false;
+            for (var i=0;i<rs.length;i++) { if (rs[i].querySelector('input').value.trim()) { has=true; break; } }
+            if (!has) { showToast('Enter at least one subject','error'); return; }
+        } else {
+            if (!document.getElementById('testName').value.trim()) { showToast('Name is required','error'); focusField('testName'); return; }
+            if (!document.getElementById('testExamNo').value.trim()) { showToast('Exam Number is required','error'); focusField('testExamNo'); return; }
+        }
+
+        if (typeof html2canvas === 'undefined') {
+            showToast('Image export library failed to load. Check your connection.', 'error');
+            return;
+        }
+
+        updatePreview();
+
+        var activeDoc = document.getElementById(currentDocType + 'Doc');
+        var tImg = activeDoc.querySelector('.template-img');
+        if (!tImg.complete || tImg.naturalHeight === 0) {
+            showToast('Template image not found. Place ' + currentDocType + '-template.jpeg in assets/', 'error');
+            return;
+        }
+
+        var btn = document.getElementById(currentDocType + 'DownloadImg');
+        var originalBtnHtml = btn ? btn.innerHTML : null;
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...'; }
+
+        /* Reset the on-screen preview's scale so we capture at full A4 size,
+           not the shrunk-down preview size. Restored in the finally block. */
+        var originalTransform = activeDoc.style.transform;
+        activeDoc.style.transform = 'none';
+
+        /* 210mm at 300dpi ≈ 2480px wide. The page renders at ~793px (96dpi)
+           in the DOM, so scale ≈ 300/96 to reach a print-quality resolution. */
+        var CAPTURE_SCALE = 300 / 96;
+
+        html2canvas(activeDoc, {
+            scale: CAPTURE_SCALE,
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            logging: false
+        }).then(function (canvas) {
+            canvas.toBlob(function (blob) {
+                if (!blob) {
+                    showToast('Could not generate image', 'error');
+                    return;
+                }
+                var studentName = (document.getElementById(
+                    currentDocType === 'testimonial' ? 'testName' : (currentDocType + 'Name')
+                ).value || 'document').trim().replace(/[^a-z0-9]+/gi, '-');
+                var filename = currentDocType + '-' + studentName + '.jpg';
+
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+
+                showToast('Image downloaded', 'success');
+            }, 'image/jpeg', 0.95);
+        }).catch(function (err) {
+            showToast('Failed to generate image', 'error');
+        }).finally(function () {
+            activeDoc.style.transform = originalTransform;
+            if (btn) { btn.disabled = false; btn.innerHTML = originalBtnHtml; }
+        });
     };
 
     /* ------------------------------------------
