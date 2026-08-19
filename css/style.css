@@ -392,19 +392,19 @@ body {
    ============================================================ */
 
 .ov-t-name { top: 138mm; left: 38mm; width: 110mm; font-size: 12pt; font-weight: bold; }
-.ov-t-examno { top: 139mm; left: 153mm; width: 50mm; font-size: 10pt; }
-.ov-t-from { top: 158mm; left: 40mm; width: 30mm; }
-.ov-t-to { top: 158mm; left: 125mm; width: 30mm; }
-.ov-t-class-entered { top: 167mm; left: 115mm; width: 30mm; }
-.ov-t-class-left { top: 167mm; left: 175mm; width: 25mm; }
-.ov-t-class { top: 177mm; left: 46mm; width: 25mm; }
-.ov-t-subjects { top: 187mm; left: 25mm; width: 170mm; height: 30mm; }
-.ov-t-academic { top: 206mm; left: 60mm; width: 130mm; }
-.ov-t-activities { top: 216mm; left: 73mm; width: 115mm; }
-.ov-t-post { top: 225mm; left: 85mm; width: 106mm; }
-.ov-t-attitude { top: 235mm; left: 70mm; width: 106mm; }
-.ov-t-remarks { top: 244mm; left: 65mm; width: 101mm; }
-.ov-t-principal { top: 252mm; left: 121mm; width: 70mm; font-size: 10pt; }
+.ov-t-examno { top: 139mm; left: 153mm; width: 50mm; font-size: 12pt; font-weight: bold; }
+.ov-t-from { top: 158mm; left: 40mm; width: 30mm; font-size: 12pt; font-weight: bold; }
+.ov-t-to { top: 158mm; left: 125mm; width: 30mm; font-size: 12pt; font-weight: bold;}
+.ov-t-class-entered { top: 167mm; left: 115mm; width: 30mm; font-size: 12pt; font-weight: bold;}
+.ov-t-class-left { top: 177mm; left: 46mm; width: 25mm; font-size: 12pt; font-weight: bold;}
+
+.ov-t-subjects { top: 185mm; left: 25mm; width: 170mm; height: 30mm; font-size: 11pt; font-weight: bold; line-height: 2;}
+.ov-t-academic { top: 206mm; left: 61mm; width: 130mm; font-size: 11pt; font-weight: bold; }
+.ov-t-activities { top: 216mm; left: 75mm; width: 115mm; font-size: 11pt; font-weight: bold;}
+.ov-t-post { top: 225mm; left: 85mm; width: 106mm; font-size: 11pt; font-weight: bold;}
+.ov-t-attitude { top: 235mm; left: 70mm; width: 106mm; font-size: 11pt; font-weight: bold;}
+.ov-t-remarks { top: 244mm; left: 65mm; width: 101mm; font-size: 11pt; font-weight: bold;}
+.ov-t-principal { top: 252mm; left: 121mm; width: 70mm; font-size: 11pt; font-weight: bold; }
 .ov-t-date { top: 265mm; left: 140mm; width: 60mm; font-size: 10pt; }
 
 
