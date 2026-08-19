@@ -395,8 +395,8 @@ body {
 .ov-t-class-entered { top: 167mm; left: 115mm; width: 30mm; font-size: 12pt; font-weight: bold;}
 .ov-t-class-left { top: 177mm; left: 46mm; width: 25mm; font-size: 12pt; font-weight: bold;}
 
-.ov-t-subjects { top: 187mm; left: 25mm; width: 170mm; height: 50mm; font-size: 11pt; font-weight: bold;}
-.ov-t-academic { top: 206mm; left: 61mm; width: 130mm; font-size: 11pt; font-weight: bold;}
+.ov-t-subjects { top: 187mm; left: 25mm; width: 170mm; height: 30mm; font-size: 11pt; font-weight: bold; line-height: 2;}
+.ov-t-academic { top: 206mm; left: 61mm; width: 130mm; font-size: 11pt; font-weight: bold; }
 .ov-t-activities { top: 216mm; left: 75mm; width: 115mm; font-size: 11pt; font-weight: bold;}
 .ov-t-post { top: 225mm; left: 85mm; width: 106mm; font-size: 11pt; font-weight: bold;}
 .ov-t-attitude { top: 235mm; left: 70mm; width: 106mm; font-size: 11pt; font-weight: bold;}
