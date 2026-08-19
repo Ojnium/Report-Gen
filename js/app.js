@@ -21,7 +21,9 @@
     var DEFAULT_SUBJECTS = [
         'English Language', 'Mathematics', 'Physics',
         'Chemistry', 'Biology', 'Civic Education',
-        'Economics', 'Geography'
+        'Economics', 'Geography', 'Government', 
+        'Lifestock Farming', 'CRS', 'Islamic Studies',
+        'Lit. in English'
     ];
 
     var GRADE_OPTIONS = ['A1','B2','B3','C4','C5','C6','D7','E8','F9'];
@@ -376,7 +378,7 @@
             if (!document.getElementById(p+'Name').value.trim()) { showToast('Student Name is required','error'); focusField(p+'Name'); return; }
             if (!document.getElementById(p+'Year').value.trim()) { showToast('Examination Year is required','error'); focusField(p+'Year'); return; }
             if (!document.getElementById(p+'ExamNo').value.trim()) { showToast('Examination Number is required','error'); focusField(p+'ExamNo'); return; }
-            if (!document.getElementById(p+'Class').value.trim()) { showToast('Class is required','error'); focusField(p+'Class'); return; }
+            
             var rs = document.querySelectorAll('#'+p+'Subjects .subject-row'), has = false;
             for (var i=0;i<rs.length;i++) { if (rs[i].querySelector('input').value.trim()) { has=true; break; } }
             if (!has) { showToast('Enter at least one subject','error'); return; }
