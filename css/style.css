@@ -78,6 +78,9 @@ body {
 .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.35); }
 .btn-danger { background: var(--danger-light); color: var(--danger); border: 1px solid transparent; }
 .btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-secondary { background: var(--bg); color: var(--primary); border: 1.5px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent-dark); background: rgba(201,168,76,0.06); }
+.btn-secondary:disabled { opacity: 0.6; cursor: wait; }
 .btn-add {
     background: var(--bg); color: var(--primary);
     border: 2px dashed var(--border); width: 100%;
@@ -207,8 +210,8 @@ body {
 .chip-label { color: var(--text-muted); font-weight: 500; }
 .chip-value { font-weight: 700; color: var(--primary); min-width: 14px; text-align: center; }
 
-.form-actions { display: flex; gap: 10px; padding-top: 16px; border-top: 2px solid var(--border); }
-.form-actions .btn { flex: 1; justify-content: center; }
+.form-actions { display: flex; gap: 10px; padding-top: 16px; border-top: 2px solid var(--border); flex-wrap: wrap; }
+.form-actions .btn { flex: 1; justify-content: center; min-width: 100px; }
 
 .preview-panel {
     flex: 1; display: flex; flex-direction: column; min-width: 0;
@@ -389,19 +392,19 @@ body {
    ============================================================ */
 
 .ov-t-name { top: 138mm; left: 38mm; width: 110mm; font-size: 12pt; font-weight: bold; }
-.ov-t-examno { top: 139mm; left: 153mm; width: 50mm; font-size: 12pt; font-weight: bold; }
-.ov-t-from { top: 158mm; left: 40mm; width: 30mm; font-size: 12pt; font-weight: bold; }
-.ov-t-to { top: 158mm; left: 125mm; width: 30mm; font-size: 12pt; font-weight: bold;}
-.ov-t-class-entered { top: 167mm; left: 115mm; width: 30mm; font-size: 12pt; font-weight: bold;}
-.ov-t-class-left { top: 177mm; left: 46mm; width: 25mm; font-size: 12pt; font-weight: bold;}
-
-.ov-t-subjects { top: 185mm; left: 25mm; width: 170mm; height: 30mm; font-size: 11pt; font-weight: bold; line-height: 2;}
-.ov-t-academic { top: 206mm; left: 61mm; width: 130mm; font-size: 11pt; font-weight: bold; }
-.ov-t-activities { top: 216mm; left: 75mm; width: 115mm; font-size: 11pt; font-weight: bold;}
-.ov-t-post { top: 225mm; left: 85mm; width: 106mm; font-size: 11pt; font-weight: bold;}
-.ov-t-attitude { top: 235mm; left: 70mm; width: 106mm; font-size: 11pt; font-weight: bold;}
-.ov-t-remarks { top: 244mm; left: 65mm; width: 101mm; font-size: 11pt; font-weight: bold;}
-.ov-t-principal { top: 252mm; left: 121mm; width: 70mm; font-size: 11pt; font-weight: bold; }
+.ov-t-examno { top: 139mm; left: 153mm; width: 50mm; font-size: 10pt; }
+.ov-t-from { top: 158mm; left: 40mm; width: 30mm; }
+.ov-t-to { top: 158mm; left: 125mm; width: 30mm; }
+.ov-t-class-entered { top: 167mm; left: 115mm; width: 30mm; }
+.ov-t-class-left { top: 167mm; left: 175mm; width: 25mm; }
+.ov-t-class { top: 177mm; left: 46mm; width: 25mm; }
+.ov-t-subjects { top: 187mm; left: 25mm; width: 170mm; height: 30mm; }
+.ov-t-academic { top: 206mm; left: 60mm; width: 130mm; }
+.ov-t-activities { top: 216mm; left: 73mm; width: 115mm; }
+.ov-t-post { top: 225mm; left: 85mm; width: 106mm; }
+.ov-t-attitude { top: 235mm; left: 70mm; width: 106mm; }
+.ov-t-remarks { top: 244mm; left: 65mm; width: 101mm; }
+.ov-t-principal { top: 252mm; left: 121mm; width: 70mm; font-size: 10pt; }
 .ov-t-date { top: 265mm; left: 140mm; width: 60mm; font-size: 10pt; }
 
 
