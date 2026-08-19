@@ -213,6 +213,10 @@ body {
 .form-actions { display: flex; gap: 10px; padding-top: 16px; border-top: 2px solid var(--border); flex-wrap: wrap; }
 .form-actions .btn { flex: 1; justify-content: center; min-width: 100px; }
 
+.form-actions .btn-danger {
+    flex-basis: 100%;
+}
+
 .preview-panel {
     flex: 1; display: flex; flex-direction: column; min-width: 0;
     background: var(--card); border-radius: var(--radius);
